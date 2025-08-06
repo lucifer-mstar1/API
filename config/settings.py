@@ -19,7 +19,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
-    'your_app_name',  # replace with your actual app
+    'billing',  # replace with your actual app
     'products',       # required for Order model
 ]
 
