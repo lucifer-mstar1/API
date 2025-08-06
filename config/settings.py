@@ -99,3 +99,11 @@ if os.environ.get('RENDER'):
     DEBUG = False
     ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
+import os
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Optional (but good) if you're using WhiteNoise:
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
