@@ -97,4 +97,5 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # For render deployment
 if os.environ.get('RENDER'):
     DEBUG = False
-    ALLOWED_HOSTS = ['your-render-url.onrender.com']  # Change this
+    ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+
