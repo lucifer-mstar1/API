@@ -1,19 +1,19 @@
-from django.shortcuts import render
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import views, status
-import stripe
+from rest_framework import status
+from rest_framework.permissions import AllowAny
 from django.conf import settings
+import stripe
+
 from .models import Payment
 from products.models import Order
-from .serializers import PaymentSerializer
-
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+class CreateChargeView(APIView):
+    permission_classes = [AllowAny]
 
-class CreateChargeView(views.APIView):
-
-    def post(self, request, *args, **kwargs, ):
+    def post(self, request, *args, **kwargs):
         stripe_token = request.data.get('stripe_token')
         order_id = request.data.get('order_id')
 
@@ -25,7 +25,7 @@ class CreateChargeView(views.APIView):
         try:
             total_amount = order.product.price * order.quantity
             charge = stripe.Charge.create(
-                amount=int(total_amount*10),
+                amount=int(total_amount * 100),  # amount in cents
                 currency="usd",
                 source=stripe_token,
             )

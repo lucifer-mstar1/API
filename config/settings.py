@@ -1,23 +1,15 @@
 import os
 from pathlib import Path
-from datetime import timedelta
-from dotenv import load_dotenv
-
-load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY SETTINGS
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "your-dev-secret-key")
 DEBUG = True
-ALLOWED_HOSTS = ['*']
 
-# CUSTOM USER MODEL
-AUTH_USER_MODEL = 'custom_auth.CustomUser'
+ALLOWED_HOSTS = ['*']  # Accept all for testing
 
-# INSTALLED APPS
+# Installed apps
 INSTALLED_APPS = [
-    # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,24 +17,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Local apps
-    'custom_auth',
-    'billing',
-    'products',
-
-    # Third-party apps
     'rest_framework',
-    'rest_framework_simplejwt',
-    'djoser',
-    'django_filters',
-    'drf_yasg',
     'corsheaders',
-    'stripe',
+    'your_app_name',  # replace with your actual app
+    'products',       # required for Order model
 ]
 
-# MIDDLEWARE
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # must be at top for CORS
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,17 +34,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CORS
-CORS_ALLOW_ALL_ORIGINS = True
-
-# URL Configuration
 ROOT_URLCONF = 'config.urls'
 
-# TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Optional: put your custom templates here
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,68 +54,30 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# DATABASE
+# DB
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-# PASSWORD VALIDATION
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
+# Static
+STATIC_URL = '/static/'
 
-# INTERNATIONALIZATION
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
-
-# STATIC FILES
-STATIC_URL = 'static/'
-
-# DEFAULT PRIMARY KEY FIELD TYPE
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# REST FRAMEWORK
+# ✅ Open access to API
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
     ],
-    'DEFAULT_PAGINATION_CLASS': "rest_framework.pagination.PageNumberPagination",
-    'PAGE_SIZE': 2,
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
-# SIMPLE JWT CONFIG
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ALGORITHM': 'HS256',
-}
+# ✅ CORS open
+CORS_ALLOW_ALL_ORIGINS = True
 
-# DJOSER CONFIG
-DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}/',
-    'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}/',
-    'ACTIVATION_URL': 'activate/{uid}/{token}/',
-    'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {},
-}
+# ✅ Stripe secret key
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_your_key_here')
 
-# ENVIRONMENT-BASED SECRETS
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
-STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
-SMS_KEY = os.getenv('SMS_KEY')
+# Optional if used anywhere:
+LOGIN_URL = None
