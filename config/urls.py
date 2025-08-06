@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/v1/custom_auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/custom_auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/v1/pay/', CreateChargeView.as_view(), name='create-charge'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
     # login/logout if required
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),

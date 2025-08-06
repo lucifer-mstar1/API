@@ -22,11 +22,13 @@ INSTALLED_APPS = [
     'corsheaders',
     'billing',  # replace with your actual app
     'products',       # required for Order model
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # must be at top for CORS
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,3 +84,17 @@ STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_your_key_here')
 
 # Optional if used anywhere:
 LOGIN_URL = None
+
+import dj_database_url
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# For render deployment
+if os.environ.get('RENDER'):
+    DEBUG = False
+    ALLOWED_HOSTS = ['your-render-url.onrender.com']  # Change this
