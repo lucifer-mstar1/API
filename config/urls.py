@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from your_app_name.views import CreateChargeView
+from billing.views import CreateChargeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
