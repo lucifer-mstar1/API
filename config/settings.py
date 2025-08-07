@@ -19,11 +19,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
     'billing',  # replace with your actual app
     'products',       # required for Order model
-    'drf_yasg'
+    'drf_yasg',
+    
+    
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # must be at top for CORS
