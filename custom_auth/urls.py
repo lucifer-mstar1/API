@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import SignupView, LoginView
+from .views import RegisterView
 
 urlpatterns = [
-    path('api/signup/', SignupView.as_view(), name='signup'),
-    path('api/login/', LoginView.as_view(), name='login'),
-]
+    path('register/', RegisterView.as_view(), name='register'),
+    path('api/v1/custom_auth/', include('billing.urls')),]
